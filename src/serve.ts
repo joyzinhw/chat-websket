@@ -1,6 +1,6 @@
 import express, { Application }  from "express"
 import http from 'http'
-import {Server} from "socket.io";
+import {Server, Socket} from "socket.io";
 
 class App {
 	private app: Application
@@ -11,14 +11,22 @@ class App {
 	 this.app = express()
 	 this.http  = http.createServer(this.app)
 	 this.io = new Server(this.http)
+	 this.listenSocket();
 	}
 
 	listenServer(){
 
 		this.http.listen(3000,() => console.log('server is running'));
 	}
-}
+	listenSocket(){
+		this.io.on('connection',(socket) =>{
+         console.log('user connected =>', socket.id);
+		});
 
-const app =  new App()
+		}
+	}
 
-app.listenServer()
+
+const app =  new App();
+
+app.listenServer();
